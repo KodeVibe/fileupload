@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Welcome to My Page
+{% endblock %}
+
+{% block content %}
+  <div class="form-container">
+    <h1>Welcome to My Page</h1>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    <div class="user-profile">
+      {% if user_profile %}
+        <p>Username: {{ user_profile.user.username }}</p>
+        <!-- Add other user profile information you want to display -->
+      {% endif %}
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+      </form>      
+    </div>
+    {% if user_inputs %}
+      <h2>Previously Entered User Inputs</h2>
+      <table class="user-inputs-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>File</th>
+            <th>Status</th>
+            <th>Download File</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user_input in user_inputs %}
+            <tr>
+              <td>{{ user_input.user_profile.user.username }}</td>
+              <td>{{ user_input.email }}</td>
+              <td>{{ user_input.address }}</td>
+              <td>{{ user_input.phone }}</td>
+              <td>
+                {% if user_input.file %}
+                  {{ user_input.file.name }}
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+              <td>{{ user_input.status }}</td>
+              <td>
+                {% if user_input.file %}
+                  <button onclick="generateSignedURL('{{ user_input.id }}')">Download</button>
+                {% else %}
+                  N/A
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+  </div>
+{% endblock %}
