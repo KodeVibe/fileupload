@@ -1,0 +1,7 @@
+Django
+django-storages
+google-cloud-storage
+celery
+redis
+channels
+daphne
